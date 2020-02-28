@@ -20,6 +20,11 @@ public class DrawUtil : MonoBehaviour
         draw_prim.drawPixel(x, y, color);
     }
 
+    // Draw Fill
+    private void drawFill(Color color) {
+        draw_prim.drawFill(color);
+    }
+
     // Draw Line
     private void drawLine(int x1, int y1, int x2, int y2, Color color) {
         int distance = Mathf.RoundToInt(Mathf.Sqrt(Mathf.Pow(x2 - x1, 2) + Mathf.Pow(y2 - y1, 2)));
