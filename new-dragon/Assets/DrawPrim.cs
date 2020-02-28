@@ -11,21 +11,13 @@ public class DrawPrim
     private int texture_height;
 
     // Variables
-    private Color[] colors;
+    public Color[] colors;
 
     // Initialize
     public DrawPrim(int width, int height) {
         colors = new Color[width * height];
         texture_width = width;
         texture_height = height;
-    }
-
-    // Create Texture Page
-    public Texture2D createTexture() {
-        Texture2D temp_tex = new Texture2D(texture_width, texture_height);
-        temp_tex.SetPixels(colors);
-        temp_tex.Apply();
-        return temp_tex;
     }
 
     // Draw Pixel
@@ -49,7 +41,7 @@ public class DrawPrimPartition : DrawPrim {
     private int texture_size;
 
     // Variables
-    private List<Color[]> color_pages;
+    public List<Color[]> color_pages;
 
     // Partitioned Prim
     public DrawPrimPartition(int width, int height, int page_size) : base(width, height) {
@@ -74,6 +66,7 @@ public class DrawPrimPartition : DrawPrim {
     }
 
     // Create Texture Page
+    /*
     public GameObject createTextureObj() {
         GameObject temp_texture_obj = new GameObject("Texture Page");
         temp_texture_obj.transform.position = Vector3.zero;
@@ -88,6 +81,7 @@ public class DrawPrimPartition : DrawPrim {
         }
         return temp_texture_obj;
     }
+    */
 
     // Draw Pixel
     public override void drawPixel(int x, int y, Color color) {

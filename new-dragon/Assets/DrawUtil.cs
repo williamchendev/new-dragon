@@ -2,31 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DrawUtil : MonoBehaviour
+public class DrawUtil
 {
     
-    // Components
+    // Settings
     public Texture2D texture;
 
-    // Settings
-    [SerializeField] private int texture_width;
-    [SerializeField] private int texture_height;
-
     // Variables
-    private DrawPrim draw_prim;
+    public DrawPrim draw_prim;
+
+    // Instantiate DrawUtil
+    public DrawUtil(Texture2D new_texture) {
+        texture = new_texture;
+        int texture_width = new_texture.width;
+        int texture_height = new_texture.height;
+
+
+        draw_prim = new DrawPrim(texture_width, texture_height);
+    }
+
+    // Update Texture2D
+    public void drawUpdate() {
+        texture.SetPixels(draw_prim.colors);
+        texture.Apply();
+    }
     
     // Draw Pixel
-    private void drawPixel(int x, int y, Color color) {
+    public void drawPixel(int x, int y, Color color) {
         draw_prim.drawPixel(x, y, color);
     }
 
     // Draw Fill
-    private void drawFill(Color color) {
+    public void drawFill(Color color) {
         draw_prim.drawFill(color);
     }
 
     // Draw Line
-    private void drawLine(int x1, int y1, int x2, int y2, Color color) {
+    public void drawLine(int x1, int y1, int x2, int y2, Color color) {
         int distance = Mathf.RoundToInt(Mathf.Sqrt(Mathf.Pow(x2 - x1, 2) + Mathf.Pow(y2 - y1, 2)));
         float angle = Mathf.Atan2(y2 - y1, x2 - x1);
 
@@ -38,11 +50,11 @@ public class DrawUtil : MonoBehaviour
     }
 
     // Draw Rectangle
-    private void drawRectangle(int x1, int y1, int x2, int y2, Color color) {
+    public void drawRectangle(int x1, int y1, int x2, int y2, Color color) {
         drawRectangle(x1, y1, x2, y2, color, false);
     }
 
-    private void drawRectangle(int x1, int y1, int x2, int y2, Color color, bool outline) {
+    public void drawRectangle(int x1, int y1, int x2, int y2, Color color, bool outline) {
         if (outline) {
             drawLine(x1, y1, x2, y1, color);
             drawLine(x1, y1, x1, y2, color);
@@ -63,17 +75,17 @@ public class DrawUtil : MonoBehaviour
     }
 
     // Draw Circle
-    private void drawCircle(int x, int y, float radius, Color color) {
+    public void drawCircle(int x, int y, float radius, Color color) {
         float circumfrence = radius * 2f * Mathf.PI;
         float radial_interpolation = 360f / circumfrence;
         drawCircle(x, y, radius, radial_interpolation, color);
     }
 
-    private void drawCircle(int x, int y, float radius, float interpolation, Color color) {
+    public void drawCircle(int x, int y, float radius, float interpolation, Color color) {
         drawCircle(x, y, radius, interpolation, 90, color);
     }
 
-    private void drawCircle(int x, int y, float radius, float interpolation, float angle, Color color) {
+    public void drawCircle(int x, int y, float radius, float interpolation, float angle, Color color) {
         int temp_x1 = Mathf.RoundToInt(x + (Mathf.Cos(Mathf.Deg2Rad * angle) * radius));
         int temp_y1 = Mathf.RoundToInt(y + (Mathf.Sin(Mathf.Deg2Rad * angle) * radius));
 
