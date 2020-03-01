@@ -91,7 +91,6 @@ public class Asteroids : MonoBehaviour
         util.drawFill(Color.clear);
 
         // Draw Ship
-        drawShip(player_ship);
 
         // Update Screen
         screen_tex.SetPixels(prim.colors);
@@ -112,14 +111,14 @@ public class Asteroids : MonoBehaviour
     }
 
     // Draw Ship
-    private void drawShip(ShipBehaviour ship) {
+    private void drawShip() {
         // Ship Settings
         int ship_size = 3;
 
         // Ship Variables
-        int temp_x = ship.position.x - Mathf.RoundToInt(camera_position.x);
-        int temp_y = ship.position.y - Mathf.RoundToInt(camera_position.y);
-        float temp_angle = (ship.rotation - 90) * Mathf.Deg2Rad;
+        int temp_x = 0;
+        int temp_y = 0;
+        float temp_angle = 0;
 
         // Ship Shape Array
         Vector4[] ship_lines = new Vector4[15];
@@ -145,10 +144,6 @@ public class Asteroids : MonoBehaviour
         ship_lines[13] = new Vector4(-2, -4, -2, -6);
         ship_lines[14] = new Vector4(-2, -6, 0, -4);
 
-        // Ship Window
-        //ship_lines[15] = new Vector4(0, -1, -2, -2);
-        //ship_lines[16] = new Vector4(-2, -2, 0, -2);
-
         // Draw Ship
         for (int i = 0; i < ship_lines.Length; i++) {
             float distance_1 = (Mathf.Sqrt(Mathf.Pow(ship_lines[i].x, 2) + Mathf.Pow(ship_lines[i].y, 2))) * ship_size;
@@ -168,62 +163,6 @@ public class Asteroids : MonoBehaviour
             util.drawLine(temp_x + Mathf.RoundToInt(Mathf.Cos(angle_1 + temp_angle) * distance_1), temp_y + Mathf.RoundToInt(Mathf.Sin(angle_1 + temp_angle) * distance_1), temp_x + Mathf.RoundToInt(Mathf.Cos(angle_2 + temp_angle) * distance_2), temp_y + Mathf.RoundToInt(Mathf.Sin(angle_2 + temp_angle) * distance_2), Color.white);
         }
 
-        // Draw Ship Trail
-        if (ship.trail != null) {
-            Vector2 ship_trail_point = Vector2.zero;
-            float ship_trail_direction = 0;
-            float ship_trail_angle = 0;
-
-            for (int i = -3; i <= 3; i += 3) {
-                ship_trail_point = new Vector2(-3, -7);
-                ship_trail_direction = (Mathf.Sqrt(Mathf.Pow((ship_trail_point.x * ship_size) - i, 2) + Mathf.Pow((ship_trail_point.y * ship_size) + i, 2)));
-                ship_trail_angle = Mathf.Atan2(ship_trail_point.y, ship_trail_point.x);
-
-                for (int t = 1; t < ship.trail.Length; t++) {
-                    float angle_1 = (ship.trail[t - 1].z - 90) * Mathf.Deg2Rad;
-                    float angle_2 = (ship.trail[t].z - 90) * Mathf.Deg2Rad;
-
-                    float point_1x = ship.trail[t - 1].x + (Mathf.Cos(angle_1 + ship_trail_angle) * ship_trail_direction);
-                    float point_1y = ship.trail[t - 1].y + (Mathf.Sin(angle_1 + ship_trail_angle) * ship_trail_direction);
-                
-                    float point_2x = ship.trail[t].x + (Mathf.Cos(angle_2 + ship_trail_angle) * ship_trail_direction);
-                    float point_2y = ship.trail[t].y + (Mathf.Sin(angle_2 + ship_trail_angle) * ship_trail_direction);
-                
-                    util.drawLine(Mathf.RoundToInt(point_1x) - Mathf.RoundToInt(camera_position.x), Mathf.RoundToInt(point_1y) - Mathf.RoundToInt(camera_position.y), Mathf.RoundToInt(point_2x) - Mathf.RoundToInt(camera_position.x), Mathf.RoundToInt(point_2y) - Mathf.RoundToInt(camera_position.y), Color.white);
-                }
-            }
-
-            util.drawCircle(Mathf.RoundToInt(temp_x + (Mathf.Cos(temp_angle + ship_trail_angle) * ship_trail_direction)), Mathf.RoundToInt(temp_y + (Mathf.Sin(temp_angle + ship_trail_angle) * ship_trail_direction)), 3, Color.white);
-
-            for (int i = -3; i <= 3; i += 3) {
-                ship_trail_point = new Vector2(3, -7);
-                ship_trail_direction = (Mathf.Sqrt(Mathf.Pow((ship_trail_point.x * ship_size) + i, 2) + Mathf.Pow((ship_trail_point.y * ship_size) + i, 2)));
-                ship_trail_angle = Mathf.Atan2(ship_trail_point.y, ship_trail_point.x);
-
-                for (int t = 1; t < ship.trail.Length; t++) {
-                    float angle_1 = (ship.trail[t - 1].z - 90) * Mathf.Deg2Rad;
-                    float angle_2 = (ship.trail[t].z - 90) * Mathf.Deg2Rad;
-
-                    float point_1x = ship.trail[t - 1].x + (Mathf.Cos(angle_1 + ship_trail_angle) * ship_trail_direction);
-                    float point_1y = ship.trail[t - 1].y + (Mathf.Sin(angle_1 + ship_trail_angle) * ship_trail_direction);
-                
-                    float point_2x = ship.trail[t].x + (Mathf.Cos(angle_2 + ship_trail_angle) * ship_trail_direction);
-                    float point_2y = ship.trail[t].y + (Mathf.Sin(angle_2 + ship_trail_angle) * ship_trail_direction);
-                
-                    util.drawLine(Mathf.RoundToInt(point_1x) - Mathf.RoundToInt(camera_position.x), Mathf.RoundToInt(point_1y) - Mathf.RoundToInt(camera_position.y), Mathf.RoundToInt(point_2x) - Mathf.RoundToInt(camera_position.x), Mathf.RoundToInt(point_2y) - Mathf.RoundToInt(camera_position.y), Color.white);
-                }
-            }
-
-            util.drawCircle(Mathf.RoundToInt(temp_x + (Mathf.Cos(temp_angle + ship_trail_angle) * ship_trail_direction)), Mathf.RoundToInt(temp_y + (Mathf.Sin(temp_angle + ship_trail_angle) * ship_trail_direction)), 3, Color.white);
-        }
-
-        // Draw Ship GUI
-        int wep_gui_width = ship.gui_wep_dimensions.x;
-        int wep_gui_height = ship.gui_wep_dimensions.y;
-        int wep_gui_xoffset = ship.gui_wep_offset.x;
-        int wep_gui_yoffset = ship.gui_wep_offset.y;
-        util.drawRectangle((-screen_width / 2) + wep_gui_xoffset, (-screen_height / 2) + wep_gui_yoffset, (-screen_width / 2) + wep_gui_xoffset + wep_gui_width, (-screen_height / 2) + wep_gui_yoffset + wep_gui_height, Color.white, true);
-        util.drawRectangle((-screen_width / 2) + wep_gui_xoffset + 2, (-screen_height / 2) + wep_gui_yoffset + 2, (-screen_width / 2) + wep_gui_xoffset + wep_gui_width - 2, (-screen_height / 2) + wep_gui_yoffset + Mathf.RoundToInt(ship.wep * (wep_gui_height - 4)) + 2, Color.white);
     }
     
 }
